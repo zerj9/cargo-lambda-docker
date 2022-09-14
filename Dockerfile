@@ -9,14 +9,16 @@ ARG CARGO_LAMBDA_ARCH=x86_64-unknown-linux-musl
 
 WORKDIR /tmp
 
-RUN wget https://ziglang.org/builds/${ZIG_BUILD}.tar.xz && \
-    tar xvf ${ZIG_BUILD}.tar.xz && \
-    mv ${ZIG_BUILD}/zig /usr/bin && \
+RUN apk update && apk add musl-dev && \
+    wget https://ziglang.org/builds/${ZIG_BUILD}.tar.xz && \
+    mkdir /usr/local/zig && \
+    tar xvf ${ZIG_BUILD}.tar.xz -C /usr/local/zig --strip-components 1 && \
     wget https://github.com/cargo-lambda/cargo-lambda/releases/download/${CARGO_LAMBDA_VERSION}/cargo-lambda-${CARGO_LAMBDA_VERSION}.${CARGO_LAMBDA_ARCH}.tar.gz && \
     tar xvf cargo-lambda-${CARGO_LAMBDA_VERSION}.${CARGO_LAMBDA_ARCH}.tar.gz && \
     mv cargo-lambda /usr/bin && \
     rm -rf /tmp/*
 
+ENV PATH="${PATH}:/usr/local/zig"
 WORKDIR /build
 
 ENTRYPOINT ["cargo", "lambda"]
