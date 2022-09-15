@@ -19,6 +19,8 @@ RUN apt update && apt install -y musl-dev && \
     rm -rf /tmp/*
 
 ENV PATH="${PATH}:/usr/local/zig"
+ENV WORKING_DIRECTORY=""
 WORKDIR /build
 
-ENTRYPOINT ["cargo", "lambda"]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
