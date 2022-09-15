@@ -1,4 +1,4 @@
-FROM rust:1-alpine
+FROM rust:1
 
 LABEL author="zerj9"
 LABEL description="This docker image provides the required packages to run cargo-lambda"
@@ -9,7 +9,7 @@ ARG CARGO_LAMBDA_ARCH=x86_64-unknown-linux-musl
 
 WORKDIR /tmp
 
-RUN apk update && apk add musl-dev && \
+RUN apt update && apt install -y musl-dev && \
     wget https://ziglang.org/builds/${ZIG_BUILD}.tar.xz && \
     mkdir /usr/local/zig && \
     tar xvf ${ZIG_BUILD}.tar.xz -C /usr/local/zig --strip-components 1 && \
